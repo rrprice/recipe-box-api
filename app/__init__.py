@@ -1,6 +1,6 @@
 import os
 from flask import Flask, g
-from app.extensions import db, migrate
+from app.extensions import db, migrate, cache
 
 # =====================================================================
 # 1. ENVIRONMENT VALIDATION UTILITIES
@@ -19,6 +19,10 @@ class Config:
     DEBUG = False
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # PRODUCTION CACHING CONFIGURATION ENGINE SETTINGS
+    CACHE_TYPE = "SimpleCache"
+    CACHE_DEFAULT_TIMEOUT = 60  # seconds
 
 class DevelopmentConfig(Config):
     """Development configuration that reads settings from the system environment."""
@@ -51,6 +55,7 @@ def create_app(config_name="development"):
     # Bind the extensions to the app lifecycle context
     db.init_app(app)
     migrate.init_app(app, db)
+    cache.init_app(app)
 
     # REGISTER MODELS METADATA BEFORE INITIALIZATION
     from app import models

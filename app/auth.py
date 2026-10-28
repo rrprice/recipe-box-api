@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import g, jsonify, request
+from flask import g, jsonify
 
 def login_required(f):
     """
@@ -14,13 +14,13 @@ def login_required(f):
     return decorated_function
 
 
-def is_owner_or_admin(recipe_row):
+def is_owner_or_admin(recipe):
     """
     Business Rules Layer: Enforces structural role and resource ownership constraints.
-    Returns True if the authenticated user is an administrator or owns the row.
+    Expects a declarative SQLAlchemy Recipe model object instance.
     """
     if g.get("current_user") is None:
         return False
     if g.current_user.get("role") == "admin":
         return True
-    return recipe_row["user_id"] == g.current_user["id"]
+    return recipe.user_id == g.current_user["id"]

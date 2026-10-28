@@ -9,3 +9,4 @@ python-dotenv==1.2.1
 Werkzeug==3.1.9
 zipp==3.23.1
 Flask-Migrate
+Flask-Caching==2.1.0
